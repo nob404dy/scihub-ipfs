@@ -3,26 +3,39 @@
   <head>
     <meta charset="utf-8">
     <title>Sci-Hub IPFS</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style>
+      body { margin:0; }
       main {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        min-height: 100vh;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      div.search {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
       input {
         width: 500px;
+      }
+      div.content {
+        width: 100vw;
+        height: 100vh;
       }
     </style>
   </head>
   <body>
     <header></header>
     <main>
+      <div class="search" id="search_div">
       <span>Search DOI</span>
       <input id="search">
-      <button id="go" onclick="go_search()">Go</button>
+      <button id="go" onclick="go_search()" style="display: none;">Go</button>
+      </div>
+      <div class="content" id="content"></div>
     </main>
     <footer></footer>
   </body>
@@ -36,16 +49,28 @@
       }
     });
 
-    // load .json
-    $.getJSON("test.json", function(json) {
-        console.log(json); // this will show the info it in firebug console
-    });
+    // load .json    
 
     // search function
     function go_search() {
       var input = document.getElementById("search");
-      alert(input.value);
+      $.getJSON("https://raw.githubusercontent.com/nob404dy/scihub-ipfs/master/scihub-index.json", function(json) {
+        for (let i = 0; i < json['paper'].length; i++) {
+          if (json['paper'][i]['doi'] == input.value){
+            console.log(json['paper'][i]['cid'])
+            load_content(json['paper'][i]['cid']);
+          }
+        } 
+        
+      });
+    }
+
+    // load IPFS content
+    function load_content(CID) {
+      document.getElementById("content").innerHTML='<object type="text/html" style="width:100%;height:100%" data="https://ipfs.io/ipfs/' + CID + '" ></object>';
+      document.getElementById("search_div").setAttribute("style","display:none");
     }
 
     </script>
+
 </html>
