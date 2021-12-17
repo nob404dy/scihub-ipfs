@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Sci-Hub IPFS</title>
+
+    <style>
+      main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
+      }
+      input {
+        width: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <span>Search DOI</span>
+      <input id="search">
+      <button id="go" onclick="go_search()">Go</button>
+    </main>
+    <footer></footer>
+  </body>
+  <script>
+    // bind ENTER on input field
+    var input = document.getElementById("search");
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       document.getElementById("go").click();
+      }
+    });
+
+    // load .json
+    $.getJSON("test.json", function(json) {
+        console.log(json); // this will show the info it in firebug console
+    });
+
+    // search function
+    function go_search() {
+      var input = document.getElementById("search");
+      alert(input.value);
+    }
+
+    </script>
+</html>
